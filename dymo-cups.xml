@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>DYMO CUPS</Name>
-  <Repository>garyyao-dev/dymo-cups:latest</Repository>
-  <Registry>https://registry.hub.docker.com/r/garyyao-dev/dymo-cups</Registry>
+  <Repository>ygy3389/dymo-cups:latest</Repository>
+  <Registry>https://registry.hub.docker.com/r/ygy3389/dymo-cups</Registry>
   <Network>br0</Network>
   <MyIP>192.168.1.201</MyIP>
   <Shell>bash</Shell>
