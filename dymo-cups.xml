@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>DYMO CUPS</Name>
+  <Repository>garyyao-dev/dymo-cups:latest</Repository>
+  <Registry>https://registry.hub.docker.com/r/garyyao-dev/dymo-cups</Registry>
+  <Network>br0</Network>
+  <MyIP>192.168.1.201</MyIP>
+  <Shell>bash</Shell>
+  <Privileged>true</Privileged>
+  <Support>https://github.com/GaryYao-Dev/dymo-cups</Support>
+  <Project>https://github.com/GaryYao-Dev/dymo-cups</Project>
+  <Overview>DYMO CUPS Docker for Unraid - Share DYMO LabelWriter 450 printer over LAN using CUPS. This container provides network printing capabilities for DYMO label printers in an Unraid environment.</Overview>
+  <Category>Other: Productivity</Category>
+  <WebUI>http://[IP]:[PORT:631]</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/GaryYao-Dev/dymo-cups/main/dymo-cups.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/GaryYao-Dev/dymo-cups/main/icon.png</Icon>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Description>DYMO CUPS Docker container for sharing DYMO LabelWriter 450 printer over network. Features: CUPS printing server, USB device passthrough, Avahi service discovery, and network isolation to avoid conflicts with host Samba services.</Description>
+  <Networking>
+    <Mode>br0</Mode>
+    <Publish>
+      <Port>
+        <HostPort>631</HostPort>
+        <ContainerPort>631</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir/>
+      <ContainerDir>/var/log/cups</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>Australia/Sydney</Value>
+      <Name>TZ</Name>
+      <Mode/>
+    </Variable>
+    <Variable>
+      <Value>Unraid</Value>
+      <Name>HOST_OS</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="WebUI" Target="631" Default="631" Mode="tcp" Description="CUPS web interface port" Type="Port" Display="always" Required="true" Mask="false">631</Config>
+  <Config Name="Fixed IP" Target="192.168.1.201" Default="192.168.1.201" Mode="" Description="Fixed IP address for the container (must be in your LAN subnet)" Type="Variable" Display="always" Required="true" Mask="false">192.168.1.201</Config>
+  <Config Name="USB Device" Target="/dev/bus/usb/001/011" Default="/dev/bus/usb/001/011" Mode="" Description="USB device path for DYMO printer (check lsusb on host)" Type="Device" Display="always" Required="true" Mask="false">/dev/bus/usb/001/011</Config>
+  <Config Name="Log Storage" Target="/var/log/cups" Default="" Mode="rw" Description="Optional: Directory to store CUPS logs persistently" Type="Path" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Timezone" Target="TZ" Default="Australia/Sydney" Mode="" Description="Container timezone" Type="Variable" Display="advanced" Required="false" Mask="false">Australia/Sydney</Config>
+  <Config Name="Host OS" Target="HOST_OS" Default="Unraid" Mode="" Description="Host operating system identifier" Type="Variable" Display="advanced" Required="false" Mask="false">Unraid</Config>
+</Container>
