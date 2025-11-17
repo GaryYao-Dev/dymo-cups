@@ -38,18 +38,6 @@
       <Mode>rw</Mode>
     </Volume>
   </Data>
-  <Environment>
-    <Variable>
-      <Value>Australia/Sydney</Value>
-      <Name>TZ</Name>
-      <Mode/>
-    </Variable>
-    <Variable>
-      <Value>Unraid</Value>
-      <Name>HOST_OS</Name>
-      <Mode/>
-    </Variable>
-  </Environment>
   <Labels/>
   <Config Name="WebUI" Target="631" Default="631" Mode="tcp" Description="CUPS web interface port" Type="Port" Display="always" Required="true" Mask="false">631</Config>
   <Config Name="Fixed IP" Target="192.168.1.x" Default="192.168.1.x" Mode="" Description="Fixed IP address for the container (must be in your LAN subnet)" Type="Variable" Display="always" Required="true" Mask="false">192.168.1.x</Config>

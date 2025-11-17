@@ -24,8 +24,10 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 4. In Unraid web UI, go to Docker > Add Container
 5. Select "DYMO CUPS" from the User Templates dropdown
 6. Configure the settings:
+
    - USB Device: `/dev/bus/usb/001/011` (adjust based on your lsusb output)
    - Fixed IP: Set your desired IP address in your LAN subnet
+
 7. Apply and start the container
 
 ## Manual Setup (Alternative)
@@ -41,23 +43,45 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 
 ## Adding Printer on Windows
 
-1. Open Control Panel > Devices and Printers.
-2. Add a printer > Network printer.
-3. Enter `http://<container-ip>:631/printers/DYMO_LabelWriter_450`.
-4. DYMO software should recognize the printer.
+1. Go to Control Panel, change view to Large icons, **right** click `Devices and Printers` , click `Open in new window`![1763353721570](image/README/1763353721570.png)
+2. Click Add a printer
 
-## Notes
+   ![1763353935740](image/README/1763353935740.png)
 
-- USB device is auto-detected by the run script.
-- For manual template setup, ensure the USB device path matches `lsusb` output.
-- CUPS runs as root for USB access.
-- HTTP on port 631 (SSL disabled for stability).
-- Requires D-Bus for Avahi service discovery.
+3. Click `The printer that I want isn't listed`
 
-## Troubleshooting
+   **DO NOT select the listed printer**
 
-- If connection refused: Check `docker ps -a` for container status. If exited, run `docker logs dymo-cups` for errors.
-- USB device: Run `lsusb | grep Dymo` on host to verify printer is connected. The script auto-detects the device path.
+   ![1763354030857](image/README/1763354030857.png)
+
+4. Select Add a printer using an IP address or hostname
+
+   ![1763354133765](image/README/1763354133765.png)
+
+5. `Device Type` select: `TCP/IP Device`
+
+   `Hostname or IP address` paste the url: e.g., `http://192.168.1.201:631/printers/DYMO_LabelWriter_450`
+
+   `Port name` keep the same as `Hostname or IP address`.
+
+   ![1763354246985](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/Deskmini/Desktop/dymo-cups/image/README/1763354246985.png)
+
+6. Addtional port information required page keep the default setting:
+
+   ![1763354381304](image/README/1763354381304.png)
+
+7. Install the printer driver page, select the right printer
+
+   ![1763354424607](image/README/1763354424607.png)
+
+8. Driver Version page select replace
+
+   ![1763354470291](image/README/1763354470291.png)
+
+9. You should be able to see the printer now is connected in the DYMO Label Software
+
+   ![1763354600381](image/README/1763354600381.png)
+
+## Note
+
 - HTTPS certificate: Browser may warn about self-signed cert; accept it.
-- Printer not found: Check container logs for USB detection and lpinfo output.
-- Port conflict: Run `netstat -tlnp | grep 631` on host to check.
