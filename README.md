@@ -82,6 +82,17 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 
    ![1763354600381](image/README/1763354600381.png)
 
+## Adding printer on Mac
+
+1. System Setting - Printers & Scanners - Add Printer, Scanner or Fax... - select the listed printer and hit Add
+
+   ![1763355415323](image/README/1763355415323.png)
+
+2. You should find the printer connted in DYMO app
+
+   ![1763355451658](image/README/1763355451658.png)
+
 ## Note
 
 - HTTPS certificate: Browser may warn about self-signed cert; accept it.
+- Tested on mac DYMO Connect v1.5.1.15, windows DYMO Connect v1.3.2.14, windows DYMO Label v8.5.1.1913
