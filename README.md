@@ -62,7 +62,7 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 
    `Hostname or IP address` paste the url: e.g., `http://192.168.1.201:631/printers/DYMO_LabelWriter_450`
 
-   `Port name` keep the same as `Hostname or IP address`.
+   keep the `Port name` same as `Hostname or IP address`.
 
    ![1763354246985](image/README/1763354246985.png)
 
