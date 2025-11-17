@@ -64,7 +64,7 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 
    `Port name` keep the same as `Hostname or IP address`.
 
-   ![1763354246985](https://file+.vscode-resource.vscode-cdn.net/c%3A/Users/Deskmini/Desktop/dymo-cups/image/README/1763354246985.png)
+   ![1763354246985](image/README/1763354246985.png)
 
 6. Addtional port information required page keep the default setting:
 
