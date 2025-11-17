@@ -4,7 +4,7 @@
   <Repository>ygy3389/dymo-cups:latest</Repository>
   <Registry>https://registry.hub.docker.com/r/ygy3389/dymo-cups</Registry>
   <Network>br0</Network>
-  <MyIP>192.168.1.201</MyIP>
+  <MyIP>192.168.1.x</MyIP>
   <Shell>bash</Shell>
   <Privileged>true</Privileged>
   <Support>https://github.com/GaryYao-Dev/dymo-cups</Support>
@@ -52,9 +52,7 @@
   </Environment>
   <Labels/>
   <Config Name="WebUI" Target="631" Default="631" Mode="tcp" Description="CUPS web interface port" Type="Port" Display="always" Required="true" Mask="false">631</Config>
-  <Config Name="Fixed IP" Target="192.168.1.201" Default="192.168.1.201" Mode="" Description="Fixed IP address for the container (must be in your LAN subnet)" Type="Variable" Display="always" Required="true" Mask="false">192.168.1.201</Config>
+  <Config Name="Fixed IP" Target="192.168.1.x" Default="192.168.1.x" Mode="" Description="Fixed IP address for the container (must be in your LAN subnet)" Type="Variable" Display="always" Required="true" Mask="false">192.168.1.x</Config>
   <Config Name="USB Device" Target="/dev/bus/usb/001/011" Default="/dev/bus/usb/001/011" Mode="" Description="USB device path for DYMO printer (check lsusb on host)" Type="Device" Display="always" Required="true" Mask="false">/dev/bus/usb/001/011</Config>
   <Config Name="Log Storage" Target="/var/log/cups" Default="" Mode="rw" Description="Optional: Directory to store CUPS logs persistently" Type="Path" Display="advanced" Required="false" Mask="false"/>
-  <Config Name="Timezone" Target="TZ" Default="Australia/Sydney" Mode="" Description="Container timezone" Type="Variable" Display="advanced" Required="false" Mask="false">Australia/Sydney</Config>
-  <Config Name="Host OS" Target="HOST_OS" Default="Unraid" Mode="" Description="Host operating system identifier" Type="Variable" Display="advanced" Required="false" Mask="false">Unraid</Config>
 </Container>
