@@ -41,7 +41,11 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
    - Username: root
    - Password: admin
 
-## Adding Printer on Windows
+## Adding Printer
+
+**Install DYMO Connect or DYMO Label Software on your client machine to install the printer driver before adding the printer**
+
+### Windows
 
 1. Go to Control Panel, change view to Large icons, **right** click `Devices and Printers` , click `Open in new window`![1763353721570](image/README/1763353721570.png)
 2. Click Add a printer
@@ -82,7 +86,7 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 
    ![1763354600381](image/README/1763354600381.png)
 
-## Adding printer on Mac
+### Mac
 
 1. System Setting - Printers & Scanners - Add Printer, Scanner or Fax... - select the listed printer and hit Add
 
