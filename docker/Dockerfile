@@ -13,8 +13,8 @@ RUN apt-get install -y cups cups-client cups-bsd cups-filters
 # Install printer drivers
 RUN apt-get install -y printer-driver-all printer-driver-dymo
 
-# Install USB utilities
-RUN apt-get install -y usbutils
+# Install USB utilities and libusb for USB device access
+RUN apt-get install -y usbutils libusb-1.0-0
 
 # Install Avahi for service discovery
 RUN apt-get install -y avahi-daemon avahi-utils

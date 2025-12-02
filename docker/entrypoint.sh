@@ -39,16 +39,54 @@ cupsd
 # Wait for CUPS to start
 sleep 5
 
-echo "Waiting for DYMO LabelWriter 450 USB device..."
-while ! lsusb | grep -q "0922:0020"; do
-  echo "USB device not found, waiting..."
+echo "Auto-detecting DYMO LabelWriter USB device..."
+DYMO_FOUND=false
+RETRY_COUNT=0
+MAX_RETRIES=12  # Wait up to 1 minute (12 * 5 seconds)
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+  if lsusb | grep -q "0922:"; then
+    DYMO_FOUND=true
+    DYMO_INFO=$(lsusb | grep "0922:")
+    echo "✓ DYMO device detected: $DYMO_INFO"
+    
+    # Extract device information
+    BUS=$(echo "$DYMO_INFO" | awk '{print $2}')
+    DEVICE=$(echo "$DYMO_INFO" | awk '{print $4}' | sed 's/://')
+    DEVICE_PATH="/dev/bus/usb/$BUS/$DEVICE"
+    echo "  Device path: $DEVICE_PATH"
+    
+    # Verify device file exists and has proper permissions
+    if [ -e "$DEVICE_PATH" ]; then
+      echo "  ✓ Device file exists with permissions:"
+      ls -l "$DEVICE_PATH"
+    else
+      echo "  ⚠ WARNING: Device file not found at $DEVICE_PATH"
+      echo "  This may indicate missing USB passthrough or incorrect container privileges."
+    fi
+    break
+  fi
+  echo "USB device not found, waiting... (attempt $((RETRY_COUNT+1))/$MAX_RETRIES)"
   sleep 5
+  RETRY_COUNT=$((RETRY_COUNT+1))
 done
 
-echo "DYMO LabelWriter 450 detected."
+if [ "$DYMO_FOUND" = false ]; then
+  echo "⚠ WARNING: DYMO device not detected after $MAX_RETRIES attempts."
+  echo "Container will continue running, but printer may not be available."
+  echo ""
+  echo "Troubleshooting:"
+  echo "  1. Ensure DYMO printer is connected and powered on"
+  echo "  2. Check container is running with --privileged flag"
+  echo "  3. Verify USB devices are visible: docker exec <container> lsusb"
+fi
 
 # List available USB devices for debugging
-echo "Available USB printers:"
+echo ""
+echo "All USB devices visible to container:"
+lsusb
+echo ""
+echo "Available USB printers detected by CUPS:"
 lpinfo -v 2>/dev/null | grep usb || echo "No USB printers found via lpinfo"
 
 # Debugging: List contents of printer-driver-dymo package

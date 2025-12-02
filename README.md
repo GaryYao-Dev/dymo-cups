@@ -15,32 +15,29 @@ DYMO LabelWriter 450 is tested, if you have other models that doesn't have netwo
 
 ## Unraid Template Installation
 
-1. On your Unraid server, run `lsusb | grep Dymo` to find the USB device:
+1. Download `my-dymo-cups.xml` from this repository
+2. Copy the file to your Unraid server's `/boot/config/plugins/dockerMan/templates-user/` directory
+3. In Unraid web UI, go to Docker > Add Container
+4. Select "DYMO CUPS" from the User Templates dropdown
+5. Configure the settings:
 
-   ```
-   Bus 001 Device 011: ID 0922:0020 Dymo-CoStar Corp. LabelWriter 450
-   ```
+   - **Fixed IP**: Set your desired IP address in your LAN subnet (e.g., 192.168.1.201)
+   - **USB Devices**: Keep default `/dev/bus/usb` (enables auto-detection)
+   - **Privileged**: Must be enabled (should be set by template)
 
-   Note the Bus and Device numbers (001/011 in this example).
+6. Apply and start the container
 
-2. Download `my-dymo-cups.xml` from this repository
-3. Copy the file to your Unraid server's `/boot/config/plugins/dockerMan/templates-user/` directory
-4. In Unraid web UI, go to Docker > Add Container
-5. Select "DYMO CUPS" from the User Templates dropdown
-6. Configure the settings:
-
-   - USB Device: `/dev/bus/usb/001/011` (adjust based on your lsusb output)
-   - Fixed IP: Set your desired IP address in your LAN subnet
-
-7. Apply and start the container
+**✨ Auto-Detection Feature**: The container automatically detects your DYMO printer on startup - no manual device path configuration needed! Works across reboots.
 
 ## Manual Setup (Alternative)
 
-1. Connect your DYMO LabelWriter 450 printer to the Unraid server
+1. Connect your DYMO LabelWriter printer to the Unraid server
 2. Upload the `dymo-cups` folder to your Unraid server
 3. Edit `scripts/run.sh` and update the IP address:
    - Change `CONTAINER_IP="192.168.1.x"` to your desired IP in your LAN subnet
-4. Run `./scripts/run.sh` in the folder (builds from project root and auto-detects USB device)
+4. Run `./scripts/run.sh` in the folder
+   - Automatically builds image and detects USB device
+   - No manual device path configuration needed!
 5. Access CUPS admin at `http://<container-ip>:631`
    - Username: root
    - Password: admin
@@ -104,3 +101,43 @@ DYMO LabelWriter 450 is tested, if you have other models that doesn't have netwo
 
 - HTTPS certificate: Browser may warn about self-signed cert; accept it.
 - Tested on mac DYMO Connect v1.5.1.15, windows DYMO Connect v1.3.2.14, windows DYMO Label v8.5.1.1913
+
+## Troubleshooting
+
+### Printer Not Detected
+
+If the printer is not detected automatically:
+
+1. **Verify USB connection on host:**
+
+   ```bash
+   lsusb | grep -i dymo
+   ```
+
+   You should see something like: `Bus 001 Device 011: ID 0922:0020 Dymo-CoStar Corp.`
+
+2. **Check if container can see USB devices:**
+
+   ```bash
+   docker exec dymo-cups lsusb
+   ```
+
+3. **Verify container logs:**
+
+   ```bash
+   docker logs dymo-cups
+   ```
+
+   Look for "DYMO device detected" message.
+
+4. **Ensure privileged mode is enabled:**
+   The container must run with `--privileged` flag for USB access.
+
+5. **Restart container after connecting printer:**
+   ```bash
+   docker restart dymo-cups
+   ```
+
+### After Reboot
+
+No action needed! The container automatically detects the printer even if the USB device number changes after a reboot.
