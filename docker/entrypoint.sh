@@ -17,8 +17,10 @@ echo "Starting DYMO CUPS entrypoint..."
 echo "Setting root password..."
 echo 'root:admin' | chpasswd
 
-# Start D-Bus daemon
+# Start D-Bus daemon (clean up stale pid file from previous run)
 echo "Starting D-Bus daemon..."
+rm -f /run/dbus/pid
+mkdir -p /run/dbus
 dbus-daemon --system --fork
 
 # Start Avahi daemon for service discovery
@@ -94,10 +96,15 @@ echo "Listing contents of printer-driver-dymo package..."
 dpkg -L printer-driver-dymo > /tmp/dymo_package_contents.txt 2>&1 || echo "printer-driver-dymo package not found or contents not listed."
 cat /tmp/dymo_package_contents.txt
 
-# Run PPD updater
+# Run PPD updater (use bash to execute in case it lacks execute permission)
 echo "Running printer-driver-dymo.ppd-updater..."
-/usr/share/cups/ppd-updaters/printer-driver-dymo.ppd-updater > /tmp/dymo_ppd_updater_output.txt 2>&1 || echo "PPD updater failed."
-cat /tmp/dymo_ppd_updater_output.txt
+if [ -f /usr/share/cups/ppd-updaters/printer-driver-dymo.ppd-updater ]; then
+  chmod +x /usr/share/cups/ppd-updaters/printer-driver-dymo.ppd-updater 2>/dev/null || true
+  bash /usr/share/cups/ppd-updaters/printer-driver-dymo.ppd-updater > /tmp/dymo_ppd_updater_output.txt 2>&1 || echo "PPD updater failed."
+  cat /tmp/dymo_ppd_updater_output.txt
+else
+  echo "PPD updater not found, skipping."
+fi
 
 # Search for DYMO PPD files again after running updater
 echo "Searching for DYMO PPD files again..."
