@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>DYMO CUPS</Name>
+  <Name>dymo-cups</Name>
   <Repository>ygy3389/dymo-cups:latest</Repository>
   <Registry>https://registry.hub.docker.com/r/ygy3389/dymo-cups</Registry>
   <Network>br0</Network>
@@ -20,7 +20,7 @@
   <DateInstalled/>
   <DonateText/>
   <DonateLink/>
-  <Description>DYMO CUPS Docker container for sharing DYMO LabelWriter printer over network. Features: Automatic USB device detection (no manual path configuration!), CUPS printing server, USB device passthrough, Avahi service discovery, and network isolation to avoid conflicts with host Samba services. Survives reboots without reconfiguration.</Description>
+  <Description>DYMO CUPS Docker for Unraid - Share DYMO LabelWriter printer over LAN using CUPS. Features automatic USB device detection - no manual configuration needed! Works across reboots. This container provides network printing capabilities for DYMO label printers in an Unraid environment.</Description>
   <Networking>
     <Mode>br0</Mode>
     <Publish>
@@ -33,14 +33,20 @@
   </Networking>
   <Data>
     <Volume>
-      <HostDir/>
+      <HostDir>/mnt/user/logs/dymo-cups</HostDir>
       <ContainerDir>/var/log/cups</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
   </Data>
+  <Environment>
+    <Variable>
+      <Value>192.168.1.x</Value>
+      <Name>192.168.1.x</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
   <Labels/>
   <Config Name="WebUI" Target="631" Default="631" Mode="tcp" Description="CUPS web interface port" Type="Port" Display="always" Required="true" Mask="false">631</Config>
-  <Config Name="Fixed IP" Target="192.168.1.x" Default="192.168.1.x" Mode="" Description="Fixed IP address for the container (must be in your LAN subnet)" Type="Variable" Display="always" Required="true" Mask="false">192.168.1.x</Config>
-  <Config Name="USB Devices" Target="/dev/bus/usb" Default="/dev/bus/usb" Mode="" Description="USB device tree for automatic DYMO printer detection. Keep default value for auto-detection." Type="Path" Display="always" Required="true" Mask="false">/dev/bus/usb</Config>
-  <Config Name="Log Storage" Target="/var/log/cups" Default="" Mode="rw" Description="Optional: Directory to store CUPS logs persistently" Type="Path" Display="advanced" Required="false" Mask="false"/>
+  <Config Name="Fixed IP" Target="192.168.1.x" Default="192.168.1.x" Mode="" Description="Fixed IP address for the container (must be in your LAN subnet)" Type="Variable" Display="always" Required="true" Mask="false">192.168.1.201</Config>
+  <Config Name="Log Storage" Target="/var/log/cups" Default="" Mode="rw" Description="Optional: Directory to store CUPS logs persistently" Type="Path" Display="advanced" Required="false" Mask="false">/mnt/user/logs/dymo-cups</Config>
 </Container>
