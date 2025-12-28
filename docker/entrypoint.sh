@@ -116,7 +116,7 @@ echo "Using USB URI: $USB_URI"
 
 # Add the printer
 echo "Adding printer..."
-lpadmin -p DYMO_LabelWriter_450 -E -v "$USB_URI" || echo "Failed to add printer"
+lpadmin -p DYMO_LabelWriter_450 -E -v "$USB_URI" -m dymo:0/cups/model/lw450.ppd || echo "Failed to add printer"
 
 # Set as default printer
 lpadmin -d DYMO_LabelWriter_450
