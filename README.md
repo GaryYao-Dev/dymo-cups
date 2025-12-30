@@ -6,6 +6,8 @@ This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using C
 
 DYMO LabelWriter 450 is tested, if you have other models that doesn't have network connecting feature, click the `Ask Zread` badge above to see how to change the hardcoded USB device path and other configurations base on this repo.
 
+This configuration is compatible with DYMO Label Software and DYMO Connect on Windows and Mac.
+
 ## Files Structure
 
 - `docker/`: Dockerfile and entrypoint script
@@ -24,6 +26,7 @@ DYMO LabelWriter 450 is tested, if you have other models that doesn't have netwo
    - **Fixed IP**: Set your desired IP address in your LAN subnet (e.g., 192.168.1.201)
    - **USB Devices**: Keep default `/dev/bus/usb` (enables auto-detection)
    - **Privileged**: Must be enabled (should be set by template)
+
 6. Apply and start the container
 
 **✨ Auto-Detection Feature**: The container automatically detects your DYMO printer on startup - no manual device path configuration needed! Works across reboots.
@@ -51,21 +54,52 @@ DYMO LabelWriter 450 is tested, if you have other models that doesn't have netwo
 2. Click Add a printer
 
    ![1763353935740](image/README/1763353935740.png)
+
 3. Click `The printer that I want isn't listed`
 
    **DO NOT select the listed printer**
 
    ![1763354030857](image/README/1763354030857.png)
-4. Select `Select a shared printer by name`
-5. Paste the url: e.g., `http://192.168.1.201:631/printers/DYMO_LabelWriter_450`
 
-   ![1766889059639](image/README/1766889059639.png)
+4. Select `Select a shared printer by name`
+5. Paste the url: e.g., `http://192.168.1.201:631/printers/DYMO_LabelWriter_450
+
+   `![1767136660891](image/README/1767136660891.png)
+
+   Then you should be able to find the printer in DYMO legacy apps.
+
+   ![1767136298408](image/README/1767136298408.png)
+
+   #### Additional steps to add printer in DYMO connect
+
+   > It seems the `http` prefix in printer name is blocked by DYMO connect, the following steps are to create a new printer with acceptable name using the port generated above.
+
+6. follow the step 2 & 3 to add a printer again and select `Add a local printer or network printer with manual settings`
+
+   ![1767137308905](image/README/1767137308905.png)
+
+7. Select the existing port that you created in step 5 (the port must be **Internet Port**)
+
+   ![1767137383968](image/README/1767137383968.png)
+
+   > After the selecting the port , you can remove the printer generated in step 5 so that the unavailable printer(the name started with `http` ) is removed from DYMO connect
+
+8. Select the corrent driver and select replace the current driver.
+
+   ![1767137523320](image/README/1767137523320.png)
+
+   ![1767137561512](image/README/1767137561512.png)
+
+   You should be able to use it in DYMO Connect now
+
+   ![1767137618557](image/README/1767137618557.png)
 
 ### Mac
 
 1. System Setting - Printers & Scanners - Add Printer, Scanner or Fax... - select the listed printer and hit Add
 
    ![1763355415323](image/README/1763355415323.png)
+
 2. You should find the printer connted in DYMO app
 
    ![1763355451658](image/README/1763355451658.png)
@@ -73,5 +107,4 @@ DYMO LabelWriter 450 is tested, if you have other models that doesn't have netwo
 ## Note
 
 - HTTPS certificate: Browser may warn about self-signed cert; accept it.
-- Tested on mac DYMO Connect v1.5.1.15,  windows DYMO Label v8.5.1.1913
-- windows `DYMO Connect` **NOT WORKING**
+- Tested on mac DYMO Connect v1.5.1.15, windows DYMO Label v8.5.1.1913, windows DYMO Connect v1.5.1.20
