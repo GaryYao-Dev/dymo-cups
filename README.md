@@ -62,17 +62,17 @@ This configuration is compatible with DYMO Label Software and DYMO Connect on Wi
    ![1763354030857](image/README/1763354030857.png)
 
 4. Select `Select a shared printer by name`
-5. Paste the url: e.g., `http://192.168.1.201:631/printers/DYMO_LabelWriter_450
+5. Paste the url: e.g., http://192.168.1.201:631/printers/DYMO_LabelWriter_450
 
-   `![1767136660891](image/README/1767136660891.png)
+   ![1767136660891](image/README/1767136660891.png)
 
    Then you should be able to find the printer in DYMO legacy apps.
 
    ![1767136298408](image/README/1767136298408.png)
 
-   #### Additional steps to add printer in DYMO connect
+#### Additional steps to add printer in DYMO connect
 
-   > It seems the `http` prefix in printer name is blocked by DYMO connect, the following steps are to create a new printer with acceptable name using the port generated above.
+> It seems the `http` prefix in printer name is blocked by DYMO connect, the following steps are to create a new printer with acceptable name using the port generated above.
 
 6. follow the step 2 & 3 to add a printer again and select `Add a local printer or network printer with manual settings`
 
