@@ -1,8 +1,8 @@
-# DYMO CUPS Docker for Unraid
+# DYMO CUPS
 
 [![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/GaryYao-Dev/dymo-cups)
 
-This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using CUPS.
+This Docker setup allows sharing a DYMO LabelWriter 450 printer over LAN using CUPS. It supports both Unraid (via template) and generic Docker deployments.
 
 DYMO LabelWriter 450 is tested, if you have other models that doesn't have network connecting feature, click the `Ask Zread` badge above to see how to change the hardcoded USB device path and other configurations base on this repo.
 
@@ -14,6 +14,79 @@ This configuration is compatible with DYMO Label Software and DYMO Connect on Wi
 - `scripts/`: One-click run script
 - `config/`: CUPS configuration files
 - `my-dymo-cups.xml`: Unraid Docker template
+
+## Docker Deployment
+
+Docker Hub image: https://hub.docker.com/repository/docker/ygy3389/dymo-cups/general
+
+This project can run on any Linux host that supports Docker and USB passthrough (e.g. Ubuntu/Debian, most NAS OS with “real” Docker). The container needs privileged mode + access to `/dev/bus/usb` so it can auto-detect the DYMO device.
+
+### Option A: docker run
+
+1. Pull the image:
+
+   ```bash
+   docker pull ygy3389/dymo-cups:latest
+   ```
+
+2. Run the container (bridge networking + port mapping):
+
+   ```bash
+   docker run -d \
+      --name dymo-cups \
+      --restart unless-stopped \
+      --privileged \
+      -v /dev/bus/usb:/dev/bus/usb \
+      -p 631:631 \
+      -v /path/on/host/dymo-cups-logs:/var/log/cups \
+      ygy3389/dymo-cups:latest
+   ```
+
+   - The log volume is optional; remove the `-v /path/on/host/...` line if you don’t need persistent logs.
+   - If you want better mDNS/Bonjour discovery (Avahi), you can use host networking on Linux:
+
+     ```bash
+     docker run -d \
+        --name dymo-cups \
+        --restart unless-stopped \
+        --network host \
+        --privileged \
+        -v /dev/bus/usb:/dev/bus/usb \
+        -v /path/on/host/dymo-cups-logs:/var/log/cups \
+        ygy3389/dymo-cups:latest
+     ```
+
+### Option B: docker compose
+
+Create a `compose.yaml`:
+
+```yaml
+services:
+  dymo-cups:
+    image: ygy3389/dymo-cups:latest
+    container_name: dymo-cups
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - '631:631'
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb
+      - /path/on/host/dymo-cups-logs:/var/log/cups
+```
+
+Then start it:
+
+```bash
+docker compose up -d
+```
+
+### Access & Credentials
+
+- CUPS Web UI: `http://<docker-host-ip>:631`
+- Username: `root`
+- Password: `admin`
+
+**✨ Auto-Detection Feature**: The container automatically detects your DYMO printer on startup - no manual device path configuration needed! Works across reboots.
 
 ## Unraid Template Installation
 
